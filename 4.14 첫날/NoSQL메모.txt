@@ -1,0 +1,253 @@
+smy4exam@gmail.com 강사님메일
+
+
+
+호환성검사
+
+환경변수 들어가서 시스템변수에 편집누르고
+PATH에다가 C:\Program Files\MongoDB\Server\5.0\bin 
+
+확인 누르고
+C 폴더에 MONGODB 폴더만들기
+
+첫번째 프롬프트 실행
+mongod -dbpath c:/MongoDB 후 엔터후   ( =mongod는 저장될 폴더를 여는것 )
+
+ctrl + f 누른뒤 localhost 키워드찾기
+
+
+
+컴파스 URI에다가 
+mongodb://localhost/  치기 CONNECT 누르기
+
+Connecting to localhost 나오는동안 기다리기
+
+안돼면 설치폴더 들어가서 다시 호환성검사하고
+
+프롬프트에 ctrl + c눌르고 ↑ 눌러서 다시해보기 그다음
+프로그램 URI에다가 다시 mongodb://localhost/  CONNECT 해보기
+되면 숨겨놓기 
+
+두번째 프롬프트 관리자용으로 열어서 mongo 치기 (셸 실행)
+
+세미콜론 ; 쳐도되고 안해도됨.
+
+화살표 자주 쓰기 위는 전에쓰던거
+
+
+
+https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=shino1025&logNo=221296071319
+참고
+https://velog.io/@chayezo/MongoDB-JSON-vs.-BSON
+참고
+
+JSON
+- 중괄호{}를 사용하고, 값을 ,로 나열하기에 표현이 간단하다.
+  대부분의 언어별 LIB 지원된다.
+  불필요한 XML대비 TEXT가 없어 패킷 용량이 감소한다.
+  대부분 언어의 기본 collection type으로 바로 사용이 가능하다.
+
+BSON
+- JSON 내용을 Binary<2진법>로 변환하여 패킷 용량이 감소한다.
+  아직 JSON이나 XML만큼 다양한 언어 LIB는 지원하지 않는다.
+ 
+
+
+
+
+
+★몽고DB란?
+웹 애플리케이션과 인터넷 기반을 위해 설계된 데이터 베이스 관리 시스템
+응용프로그램을 쉽게 개발하고  확장할수 있도록 돕는 구조 
+
+도큐먼트 데이터베이스: 
+- 필드 또는 키 와 연결된 값의 집합으로 구성된 자료구조
+- 도큐먼트 형식은 JSON 객체와 유사함 > 직관적인 데이터 모텔
+바이너리 제이슨 = BSON
+{   << 이괄호가 제이스형태고 도큐먼트 1개 라는뜻
+	name: "conan"
+	age: 10
+	status: "S"
+	email: "conan@aaa.com"
+}
+자바스크립도 이렇게 씀
+
+장점:	프로그래밍 언어의 자료형에 해당
+	테이블 조인의 필요성 감소
+	동적 스키마는 다형성 지원
+
+컬렉션: (도큐먼트가 모인것)
+도큐먼트가 저장됨
+관계형데이터베이스의 ' 테이블 '에 해당
+
+키  > 도큐먼트 > 컬렉션  이렇게 커지는거원리
+
+
+
+
+
+---------------------
+몽고DB기능
+데이터모델
+- 스키마 없는 모델의 장점: 애플리케이션이 데이터 구조를 결정
+
+애드혹 쿼리 (AD HOC QUERY)
+- 시스템이 받아 들일 수 있는 질의를 미리 정의할 필요가없음
+- 관계형 데이터베이스에서 필수적인 쿼리 성능의 대부분을 유지할 수 있게함
+
+인덱스
+
+수평적 확장이 용이
+-서버를 분산
+-시스템에러 발생되도 분산된서버 피해가 경감
+-샤딩메커니즘으로 데이터를 여러 노드에 분산한것을 자동으로 관리
+
+
+※ 수직적 향상은 간단하고 비용절감되지만, 한계에 도달하면 향상불가능
+
+-------------------
+REPL : READ / EVLUATE / PRINT / LOOP 코드를 입력하면 결과가 바로출력
+
+-------------------
+
+명령어
+db
+show dbs
+use <데이터베이스명>
+insertOne/insertMany : 컬렉션에 도큐먼트를 삽입 컬렉션이 존재하지않으면 생성후 삽입
+find 
+
+
+------
+셸 프롬프트에 db.movies.insertMany([ { title:'Titanic', year:1997, awars:{   wins:127,   nominations:63,   text: 'Won 11 Oscars, Another 116 wins & 63 nominations.' }, cast: ['Leonardo DiCaprio', 'Kate Winslet', 'Billy Zane', 'Kathy Bates'] }, {  title: 'The Dark Knight', year: 2008, awards: {   wins:144,   nominations:106,   text:'Won 2 Oscars. Another 142 wins & 106 nominations.' }, cast: ['Christian Bale','Heath ledger','Aaron Eckhart','Michael Canine'], directors: ['Christopher Nolan'] }       ])
+
+------
+구조
+(  	[ 	  {         }    ]   )
+
+자바스크립트 : [ ]
+---------
+ db.movies.find({}) 치면
+내가 입력했던 데이터가 나옴
+
+
+
+---------------------------------------------------------
+select * from movies(테이블명)  :했던것 다나옴
+
+db.movies.find( { "directors":"Christopher Nolan"} )
+
+
+db.movies.find({"year":{$in:[1997,1998]} }) : or연산같은거임   타이타닉나옴
+
+db.movies.find({"awards.wins":{$gt: 100}})
+
+gt (greater than) :  '  > ' 표시임
+gte: ' >= '
+lt : ' < '
+lte : ' <= ' 
+
+---------------------------------------------------------
+반환할 필드를 지정 : projection
+<query document>,<projection document>
+프로젝션 도큐먼트는 다음에 지정함
+<field>:1 반환될 도큐먼트에포함
+<field>:0 반환될 도큐먼트에 포함하지 않음
+
+db.movies.find({},{"title":1,"directors":1,"year":1});
+
+>db.movies.find({},{"_id":},{"title":1,"genres":1}); <<수정해야함 잘못쓴거있음
+
+----------------------
+컬렉션
+관계형데이터에베이스에  ' 테이블 '  에 해당
+
+명시적 생성방법
+db.movies (name,options)
+-----------------------------------
+name :  {first: "steve", last : "Jobs" }     :  first ,last 필드를 갖고 있는 내장도큐먼트(임베디드)  ={ } 쓰면 인식
+
+필드이름: (문자열)
+
+_id  기본키로 사용하도록 예약됨
+null 문자 포함할수 없음
+필드이름 중복 허용하지 않음
+" " , ' ' 둘다 써도 가능
+
+표기법 : ( . )
+배열의 요소에 접근할 경우
+ex) "<array>.<index>
+내장 도큐먼트의 필드에 접근할경우
+ex) <embedded document>.<field>
+-----------------------------------------------
+CRUD Operations
+  ↓
+Create : insertOne
+Read : find()
+Update : db.users.updateOne()
+		updateMany()
+		rePlaceOne()
+Delete		deteleOne()
+		deleteMany()
+-------------------------------------------------
+치면 된다
+db.users.insertOne( -1
+{		-2
+name : "conan",	-3
+age : 10,		-4
+status: "S"	-5
+}		-6
+)		-7
+
+↑ 코드 참고
+
+db.users.find(  { age : {$gt: 18}}, {name : 1, address:1}  ).limit(5) << $gt: 18 : 18세이기에 안나옴
+db.users.find(  { age : {$gt: 9}}, {name : 1, address:1}  ).limit(5)   << $gt: 9  : 10세 미만이기에 나옴
+
+ db.users.updateMany( {age:{$gt:18}}, {$set:{status:"reject"}}  )  << 18세이기에 안나와서 수정이안됌
+ db.users.updateMany( {age:{$gt:9}}, {$set:{status:"reject"}}  ) << 9세이기에 수정이 됨
+
+db.users.deleteMany( {status:"reject"} ) << 삭제 
+
+
+
+{ item: "canvas",
+...   qty: 100,
+...   tags: ["cotton"],
+...   size: {h:20, w:30, uom: "cm"}
+... }
+... )
+
+db.inventory.find({ item: "canvas" }).pretty() 로 확인하기
+
+
+-------------------------------------------------------------------------------
+db{ item: "note", qty: 25, tags: ["blank", "red"], size: {h:14, w:21, uom:"cm"}},
+... { item: "mat", qty: 85, tags: ["gray"], size: {h:28, w:36, uom:"cm"}},m:"cm"}},
+... { item: "mousepad",qty: 25, tags: ["gel", "blue"], size: {h:19,w:23,uom:"cm"}}
+... ])
+치면
+{
+        "acknowledged" : true,
+        "insertedIds" : [
+                ObjectId("62564cd50ad40048691fabe4"),
+                ObjectId("62564cd50ad40048691fabe5"),
+                ObjectId("62564cd50ad40048691fabe6")
+        ]
+}나옴
+
+
+$or :[   {ghjg}   ,    {gjgyjtgj}  ]
+
+
+
+
+
+db.student.find({$or:[{"Course":"MCA"},{qty :{"batch_year":2018}}]}).pretty() 3- 1번 답 코드
+
+db.student.find({$or:[{"personal_details.age":20},{"personal_details.City":"London"}]}).pretty() 3-2번 답코드
+
+db.student.find({"language":{$in : ["C++","java","python"]}}).pretty() 3-3번 답 코드
+
+
+
