@@ -1,0 +1,194 @@
+도큐먼트 갱신
+db.inventory.updateOne(
+{item: "paper"},
+{
+$set: {"size.uom":"cm",status:"P"},
+$currentDate:{lastModified:true}
+}
+)
+
+
+
+db.inventory.updateMany(
+{"qty": {$lt : 50}},
+{
+$set : {"size.uom":"in",status:"P"},
+$currentDate : {lastModfied:true}
+}
+)
+
+
+ db.inventory.updateMany( 
+{ "qty" : {$lt : 50}}, 
+{   $set : {"size.uom":"in",status:"P"},  
+ $currentDate : { lastModified: true}     } )
+
+
+
+
+
+db.inventory.replaceOne(
+{item : "paper"},
+{item : "paper",instock : [{warehouse : "A", qty: 60   }, 
+{warehouse:"B",qty : 40}  ] }
+)
+
+
+ -----------------------------------
+연습문제
+db.student.updateMany( 
+{ name :{$in : ["Mick", "Zoya", "Mia"]} }, 
+{$set :  { pending_fees : 12000}} ) 하고
+
+db.student.find().pretty() 로확인하기
+-----------------------------------
+도큐먼트 준비
+for(i=0; i<100; i++){ db.foo.insertOne({x:i}); }
+
+커서생성
+var cursor =db.foo.find(); 엔터치고 밑에꺼 바로치기
+
+데이터 fetch
+while(cursor.hasNext()){ obj=cursor.next(); print(obj.x); }
+
+p.109
+밑에 예시문 var3줄 쓰고 .cursor.hasnext
+
+sort("x":1)  = 정렬하다  1이니 오름차순
+
+limit (1) : 한줄만 보고싶다.
+
+skip(10) 10개 건너뛰겟다.
+
+
+순서바꿔도 된다 = Method chaning
+
+
+
+---------------------
+인덱스 기본이름
+인덱스 키와 방향의 조합
+
+샘플데이터생성하기
+for(i=0; i<500000; i++)
+{ db.user.insert({ "userid":i, "name":"user"+i, "age":"user"+i, "age":Math.floor(Math.random()*100),
+ "score":Math.floor(Math.random()*100),
+ "time":new Date() }); }
+
+--------------------------------------
+.find 로 확인하는거임
+↓
+인덱스 생성 전 검색 속도측정
+db.user.find( {score:"23"} ).explain("executionStats").executionStats.
+executionTimeMillis
+
+db.user.createIndex() 인덱스 만들기
+
+db.user.find( {score:"23"} ).explain("executionStats").executionStats.
+executionTimeMillis  << 시간 표시
+
+db.user.find( {score:"23"} ).explain("executionStats") << 길게 모두표시
+
+
+
+
+
+1... userid : 360 / 2
+2... score:  53/ 12
+
+3... 0 /19
+4....   / 1347
+5...    / 1069
+6...     / 968
+7...        / 1 
+
+-------------------------------------
+무조건 있는 필드명만 인덱스 생성가능
+
+인덱스생성
+db.user.createIndex( { userid:1} ) <<< 
+
+복합인덱스 생성
+db.user.createIndex({"age":1, "username":-1})   1:오름차순 -1 내림차순밖에 설정못함 숫자는
+
+인덱스조회
+db.user.getIndexex()
+
+
+인덱스삭제
+db.user.dropIndex ("userid_1_socre_-1" )
+
+
+
+-----------------------------------------------
+텍스트인덱스
+
+db.library.insert(
+... ... [
+... ... {_id : 101, name : "Java", description : "By ABC"},
+... ... {_id : 102, name : "MongoDB", description : "By XYZ"},
+... ... {_id : 103, name : "Python", description : "By ABCD"},
+... ... {_id : 104, name : "Engineering Mathematics", description : "By *****"},
+... ... {_id : 105, name : "Salesforce", description : "By Salesforce"}]) db.library.createIndex({name:"text",description:"text"})
+
+
+"java"가 있는 도큐먼트 반환
+db.library.find($text:{$search:"Java"}})
+
+sorting 
+몽고디비가 반환하는 결과는 기본적으로 정렬되어 있지 않으므로, 정렬된 결과를 원하는 sort()사용
+
+
+
+
+
+
+
+--------------------------
+명령프롬프트 새로 관리자용 키기
+
+cd ../../
+
+dir
+
+echo "Hello, world"> foo.txt
+
+dir
+
+mongofiles put foo.txt
+
+mongofiles list
+
+rm foo. txt
+
+del foo.txt
+
+mongofiles get foo.txt
+
+cat foo.txt
+
+start foo.txt
+
+
+------------------------
+아나콘다 프롬프트 켜서 conda install pymongo 다운받고
+아나콘다 프롬프트로 쥬피터랩 들어가서 홈페이지에 p218 그대로 쓰기
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
